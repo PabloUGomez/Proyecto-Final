@@ -1,23 +1,56 @@
-<script setup lang="ts">
-</script>
 
 <template>
   <main>
-    <form action="procesar_registro.php" method="post">
+    <form action="#" @submit.prevent="registrar">
         <h2>Registro</h2>
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
+        <input type="text" id="nombre" name="nombre" required v-model="nombre" >
 
         <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" required v-model="email">
 
         <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" required v-model="password">
 
         <input type="submit" value="Registrar">
     </form>
   </main>
 </template>
+
+<script lang="ts">
+    import  Vue from 'vue';
+    import {auth} from '../firebaseConfig';
+    import {createUserWithEmailAndPassword} from 'firebase/auth'
+
+    type User = {
+        nombre: string,
+        email: string,
+        password: string,
+    };
+    export default Vue.extend({
+        data() : User{
+            return {
+                nombre: '',
+                email: '',
+                password: '',
+            };
+        },
+        methods: {
+            registrar() { 
+            //validaciones extra           
+            createUserWithEmailAndPassword(auth, this.email,this.password)
+            .then ((credenciales)=>{
+                const user = credenciales.user;
+                console.log(user);
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+            },
+        },
+        });
+</script>
+
 
 <style>
     body {
