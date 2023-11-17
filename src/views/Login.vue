@@ -1,74 +1,78 @@
+
 <template>
-  <main>
-    <form action="procesar_login.php" method="post">
-        <h2>Iniciar Sesión</h2>
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Iniciar Sesión">
-    </form>
-  </main>
+    <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
+  <!-- component -->
+        <form class="flex w-[30rem] flex-col space-y-10" @submit.prevent="iniciarSesion">
+            <div class="text-center text-4xl font-medium">Iniciar sesion</div>
+            <div
+                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+                <input
+                    type="text"
+                    placeholder="Email"
+                    v-model="email"
+                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                />
+            </div>
+            <div
+                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+                <input
+                    type="password"
+                    placeholder="Password"
+                    v-model="password"
+                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                />
+            </div>
+            <button
+                class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
+                type="submit"
+                >
+            Iniciar secion
+            </button>
+            <a
+                href="#"
+                class="transform text-center font-semibold text-gray-500 duration-300 hover:text-gray-300"
+            >OLVIDASTE TU CONTRASEÑA?
+            </a>
+            <p class="text-center text-lg">
+                No tenes cuenta?
+                <router-link
+                    to="/"
+                    class="font-medium text-indigo-500 underline-offset-4 hover:underline"
+                >
+                    Crea una
+                </router-link>
+            </p>
+        </form>
+    </main>
 </template>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
 
-    form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-        box-sizing: border-box;
-    }
+<script lang="ts">
+    import '../assets/main.css'
+    import  Vue from 'vue';
+    import {auth} from '../firebaseConfig';
+    import {signInWithEmailAndPassword } from 'firebase/auth'
 
-    h2 {
-        text-align: center;
-        color: #333;
-    }
-
-    label {
-        color: #555;
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    input[type="submit"] {
-        background-color: #4caf50;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-
-    a {
-        color: #065fd4;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>
+    export default Vue.extend({
+        data() {
+            return {
+                email: '',
+                password: '',
+            };
+        },
+        methods: {
+            iniciarSesion() {                 
+            //validaciones extra           
+            signInWithEmailAndPassword(auth, this.email,this.password)
+            .then ((credenciales)=>{
+                const user = credenciales.user;
+                this.$router.push('/Tareas')
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+            },
+        },
+        });
+</script>
