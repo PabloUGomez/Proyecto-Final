@@ -24,7 +24,7 @@ const router = new VueRouter({
     {
       path: '/Tareas',
       name: 'tareas',
-      component: () => import('../views/ListaTareas.vue')
+      component: () => import('../views/Tareas.vue')
     }
   ]
 })
