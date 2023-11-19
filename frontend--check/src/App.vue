@@ -1,8 +1,5 @@
 <script>
-
-import './assets/main.css'
-
-
+import "./assets/main.css";
 </script>
 
 <template>
@@ -11,5 +8,4 @@ import './assets/main.css'
   </div>
 </template>
 
-<style>
-</style>
+<style></style>
