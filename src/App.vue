@@ -10,6 +10,3 @@ import './assets/main.css'
     <router-view />
   </div>
 </template>
-
-<style>
-</style>
