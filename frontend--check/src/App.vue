@@ -1,8 +1,5 @@
 <script>
-
-import './assets/main.css'
-
-
+import "./assets/main.css";
 </script>
 
 <template>
@@ -10,3 +7,5 @@ import './assets/main.css'
     <router-view />
   </div>
 </template>
+
+<style></style>

@@ -33,3 +33,9 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Correr TAILWINDCSS
+
+```sh
+npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
+```
