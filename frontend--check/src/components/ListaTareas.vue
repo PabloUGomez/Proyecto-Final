@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col">
-    <div class="bg-transparent text-white w-full px-4 my-8 h-16 flex items-center border-b border-white">
+    <section class="bg-transparent text-white w-full px-4 my-8 h-16 flex items-center border-b border-white">
       <div class="flex  w-full items-center justify-between mx-32">
         <div class="my-6 mr-4 flex w-full items-center justify-between rounded-lg border px-3 py-3 sm:w-[350px] sm:flex-initial bg-white">
           <input class="w-full text-sm outline-none" type="text" placeholder="Buscar"  />
@@ -23,8 +23,12 @@
           </div>
         </div>
       </div>
-  </div>
+  </section>
+    <CrearTarea v-if="mostrar" @cerrar="cerrarFormulario" />
     <ul>
+      <div class="border-2 border-indigo-500 border-dashed mb-6 rounded-lg p-6 duration-300 hover:bg-indigo-600" @click="mostrarFormulario">
+        <h3 class="text-1xl font-bold text-white text-center">+ Agregar tarea</h3>
+      </div>
       <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea"></Tarea>
     </ul>
   </div>
@@ -32,10 +36,25 @@
 
 <script>
 import Tarea from './Tarea.vue';
+import CrearTarea from '../components/CrearTarea.vue';
 
 export default {
   components: {
     Tarea,
+    CrearTarea,
+  },
+  data() {
+    return {
+      mostrar: false,
+    };
+  },
+  methods: {
+    mostrarFormulario() {
+      this.mostrar = true;
+    },
+    cerrarFormulario() {
+      this.mostrar = false;
+    },
   },
   props: {
     tareas: {
