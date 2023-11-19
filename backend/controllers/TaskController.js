@@ -23,13 +23,14 @@ const taskController = {
     Logger.routerLog(req, "POST", "taskController", "store");
 
     const { userId, title, description, isComplete } = req.body;
-
-    setDataInModel(keyRedisTask, Task, {
+    const data = {
       userId,
       title,
       description,
       isComplete,
-    })
+    };
+
+    setDataInModel(keyRedisTask, Task, data)
       .then((task) => res.status(201).json(task))
       .catch((error) => res.status(500).send(error));
   },
