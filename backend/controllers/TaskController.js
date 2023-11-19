@@ -1,7 +1,7 @@
 //Logger
 const Logger = require("./../utils/Logger.js");
 //RedisCache
-const { getDataFromCache } = require("../utils/functions.js");
+const { getDataFromCache, setDataInModel } = require("../utils/functions.js");
 
 const Task = require("../models/Task.js");
 const Redis = require("ioredis");
@@ -12,27 +12,26 @@ const keyRedisTask = "task";
 
 const taskController = {
   index: async (req, res) => {
-    Logger.routerLog(req, "taskController", "index");
+    Logger.routerLog(req, "GET", "taskController", "index");
 
     getDataFromCache(keyRedisTask, Task)
       .then((tasks) => res.json(tasks))
-      .catch((error) => res.status(500).send("Err"));
+      .catch((error) => res.status(500).send(error));
   },
 
   store: async (req, res) => {
-    res.json([]);
+    Logger.routerLog(req, "POST", "taskController", "store");
 
-    const { nombre, edad } = req.body;
-    const nuevoTask = new Task({ nombre, edad });
+    const { userId, title, description, isComplete } = req.body;
 
-    try {
-      await nuevoTask.save();
-      await redis.del(keyRedisTask);
-      res.status(201).json(nuevoTask);
-    } catch (error) {
-      console.log("Err");
-      res.status(500).send("Err");
-    }
+    setDataInModel(keyRedisTask, Task, {
+      userId,
+      title,
+      description,
+      isComplete,
+    })
+      .then((task) => res.status(201).json(task))
+      .catch((error) => res.status(500).send(error));
   },
   update: async (req, res) => {
     res.json([]);
