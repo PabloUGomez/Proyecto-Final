@@ -1,35 +1,25 @@
+//Env
+require("dotenv").config();
+const env = process.env;
+
 const express = require("express");
 const mongoose = require("mongoose");
 
 const cors = require("cors");
 const app = express();
-const SERVER_PORT = 3000;
+
+//Logger
+const Logger = require("./utils/Logger.js");
 
 //Routes
 const routes = require("./routes/index.js");
 
 //MongoDB Connection
-const dbHOST = "127.0.0.1";
-const dbURI = `mongodb://${dbHOST}:27017`;
-const dbName = "database_todolist";
+const mongoURL = `mongodb://${env.MONGO_HOST}:${env.MONGO_PORT}/${env.MONGO_DB}`;
 
-mongoose.connect(`${dbURI}/${dbName}`, {
+mongoose.connect(mongoURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
-// Evento cuando la conexión es exitosa
-mongoose.connection.on("connected", () => {
-  console.log(`Connected to MongoDB at ${dbURI}/${dbName}`);
-});
-
-// Evento cuando hay un error en la conexión
-mongoose.connection.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
-});
-
-// Evento cuando la conexión se cierra
-mongoose.connection.on("disconnected", () => {
-  console.log("MongoDB disconnected");
 });
 
 //Middleware
@@ -38,6 +28,10 @@ app.use(cors());
 
 app.use("/api", routes);
 
-app.listen(SERVER_PORT, () =>
-  console.log(`Server start at port ${SERVER_PORT}`)
-);
+app.listen(parseInt(env.SERVER_PORT), () => {
+  console.clear();
+  Logger.dividerMagenta();
+  Logger.serverStart("127.0.0.1", env.SERVER_PORT);
+  Logger.mongoStart(mongoURL);
+  Logger.dividerMagenta();
+});
