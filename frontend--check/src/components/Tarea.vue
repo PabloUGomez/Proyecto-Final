@@ -5,7 +5,7 @@
             <div class="flex items-center">
               <div>
                 <h3 class="text-base font-semibold text-gray-900">{{tarea.name}}</h3>
-                <span class="block text-xs font-normal text-gray-500">Categoria</span>
+                <span class="block text-xs font-normal text-gray-500">{{tarea.categoria}}</span>
               </div>
             </div>
             <p class="text-sm font-medium text-indigo-500"><span class="mr-0.5">+</span>Follow</p>
@@ -29,11 +29,18 @@
     </li>
   </template>
   
-  <script>
+  <script lang="ts">
   export default {
     props: {
       tarea: {
-        type: Object,
+        type: Object as () => {
+          id: number;
+          name: string;
+          categoria: string;
+          description: string;
+          dueDate: Date;
+          completed: boolean;
+        },
         required: true,
       },
     },

@@ -39,6 +39,15 @@
                 >
             Registrarse
             </button>
+            <p class="text-center text-lg">
+                Ya tienes cuenta?
+                <router-link
+                    to="/Login"
+                    class="font-medium text-indigo-500 underline-offset-4 hover:underline"
+                >
+                    Inicia sesión
+                </router-link>
+            </p>
         </form>
     </main>
 </template>

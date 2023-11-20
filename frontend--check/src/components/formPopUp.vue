@@ -1,7 +1,7 @@
 <template>
     <div class="fixed top-0 left-0 w-full h-full bg-opacity-50 bg-black">
         <div class=" flex justify-center items-center w-full h-full mt-12">
-          <form action="https://formbold.com/s/FORM_ID" method="POST" class="relative flex-col bg-slate-400 mb-6 rounded-lg p-6 w-4/5 md:w-1/2" >
+          <form class="relative flex-col bg-slate-400 mb-6 rounded-lg p-6 w-4/5 md:w-1/2" @submit.prevent="enviarDatos">
             <div class="mb-5">
               <label
                 class="mb-3 block text-base font-medium text-[#07074D]"
@@ -10,10 +10,11 @@
               </label>
               <input
               id="titulo"
+              v-model="titulo"
               type="text"
               placeholder="Titulo"
-              v-model="nombre"
-                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              required
               />
             </div>
             <div class="mb-5">
@@ -24,11 +25,12 @@
               </label>
               <select
                 id="categoria"
-                placeholder="example@domain.com"
+                v-model="categoria"
                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               >
                 <option value="Evento">Evento</option>
                 <option value="Entretenimiento">Entretenimiento</option>
+                <option value="Deportes">Entretenimiento</option>
             </select>
             
             </div>
@@ -41,7 +43,9 @@
               <input
                 type="date"
                 id="fecha"
+                v-model="fecha"
                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                required
               />
             </div>
             <div class="mb-5">
@@ -53,14 +57,17 @@
               <textarea
                 rows="4"
                 id="descripcion"
+                v-model="descripcion"
                 placeholder="Escribe tu descripcion"
                 class="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                required
               ></textarea>
             </div>
             <div>
               <button
-                class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"
-              >
+                type="submit"
+                class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"              
+                >
                 Submit
               </button>
               <button
@@ -75,11 +82,30 @@
       </div>
   </template>
   
-  <script>
+  <script lang="ts">
   export default {
+    data() {
+    return {
+      titulo: '',
+      categoria: 'Evento',
+      fecha: '',
+      descripcion: '',
+    };
+    },
     methods: {
       cerrar() {
         this.$emit('cerrar');
+      },
+      enviarDatos() { 
+        console.log('enviando datos');
+        
+        this.$emit('enviarDatos', {
+        titulo: this.titulo,
+        categoria: this.categoria,
+        fecha: this.fecha,
+        descripcion: this.descripcion,
+      });
+      this.cerrar();
       },
     },
   };
