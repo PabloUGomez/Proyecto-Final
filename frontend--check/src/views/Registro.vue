@@ -1,81 +1,87 @@
-<script setup lang="ts">
-</script>
 
 <template>
-  <main>
-    <form action="procesar_registro.php" method="post">
-        <h2>Registro</h2>
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-
-        <label for="email">Correo electrónico:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Registrar">
-    </form>
-  </main>
+    <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
+        <form  class="flex w-[30rem] flex-col space-y-10" @submit.prevent="registrar">
+            <div class="text-center text-4xl font-medium">Crea una cuenta</div>
+            <div
+                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+                <input
+                    type="text"
+                    placeholder="Nombre"
+                    v-model="nombre"
+                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                />
+            </div>
+            <div
+                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+                <input
+                    type="email"
+                    placeholder="Email"
+                    v-model="email"
+                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                />
+            </div>
+            <div
+                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+                <input
+                    type="password"
+                    placeholder="Password"
+                    v-model="password"
+                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                />
+            </div>
+            <button
+                class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
+                type="submit"
+                >
+            Registrarse
+            </button>
+            <p class="text-center text-lg">
+                Ya tienes cuenta?
+                <router-link
+                    to="/Login"
+                    class="font-medium text-indigo-500 underline-offset-4 hover:underline"
+                >
+                    Inicia sesión
+                </router-link>
+            </p>
+        </form>
+    </main>
 </template>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+<script lang="ts">
+    import  Vue from 'vue';
+    import {auth} from '../firebaseConfig';
+    import {createUserWithEmailAndPassword} from 'firebase/auth'
 
-    form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    h2 {
-        text-align: center;
-        color: #333;
-    }
-
-    label {
-        color: #555;
-        font-weight: bold;
-    }
-
-    input {
-        width: 100%;
-        padding: 8px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    input[type="submit"] {
-        background-color: #4caf50;
-        color: #fff;
-        cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-
-    a {
-        color: #065fd4;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
-</style>
+    type User = {
+        nombre: string,
+        email: string,
+        password: string,
+    };
+    export default Vue.extend({
+        data() : User{
+            return {
+                nombre: '',
+                email: '',
+                password: '',
+            };
+        },
+        methods: {
+            registrar() { 
+            //validaciones extra           
+            createUserWithEmailAndPassword(auth, this.email,this.password)
+            .then ((credenciales)=>{
+                const user = credenciales.user;
+                console.log(user);
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+            },
+        },
+        });
+</script>
