@@ -30,7 +30,7 @@
               >
                 <option value="Evento">Evento</option>
                 <option value="Entretenimiento">Entretenimiento</option>
-                <option value="Deportes">Entretenimiento</option>
+                <option value="Deportes">Deportes</option>
             </select>
             
             </div>
@@ -96,9 +96,7 @@
       cerrar() {
         this.$emit('cerrar');
       },
-      enviarDatos() { 
-        console.log('enviando datos');
-        
+      enviarDatos() {         
         this.$emit('enviarDatos', {
         titulo: this.titulo,
         categoria: this.categoria,
