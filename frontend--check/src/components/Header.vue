@@ -190,7 +190,7 @@ export default Vue.extend({
     cerrarSesion() {
       signOut(auth)
         .then(() => {
-          console.log("Sesión cerrada correctamente");
+          this.$router.push("/Login");
         })
         .catch((error:any) => {
           console.error("Error al cerrar sesión:", error.message);
