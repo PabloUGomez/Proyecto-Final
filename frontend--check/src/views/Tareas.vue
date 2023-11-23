@@ -15,6 +15,8 @@
 </template>
 
 <script lang="ts">
+import VueRouter, { NavigationGuard } from "vue-router";
+import Vue from "vue";
 import "../assets/main.css";
 import ListaTareas from "../components/ListaTareas.vue";
 import Header from "../components/Header.vue";
@@ -27,6 +29,7 @@ type Tarea = {
   dueDate: Date;
   completed: boolean;
 };
+
 
 export default {
   components: {

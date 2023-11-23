@@ -18,7 +18,7 @@
             <input type="checkbox" />
 
             <div
-              class="swap-off animate-fade animate-once animate-ease-out animate-normal flex items-center justify-center animate-duration-500"
+              class="swap-off animate-fade animate-once animate-ease-out animate-normal flex items-center justify-center animate-duration-500 bg-indigo-100 p-2 rounded-lg"
             >
               <p class="text-sm font-medium text-indigo-500 p-2">Finalizar</p>
 
