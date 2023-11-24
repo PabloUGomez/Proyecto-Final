@@ -4,6 +4,8 @@ const taskScheme = new mongoose.Schema({
   userId: String,
   title: String,
   description: String,
+  date: Date,
+  favorite: Boolean,
   isComplete: Boolean,
 });
 

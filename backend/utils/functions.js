@@ -37,5 +37,59 @@ function setDataInModel(cacheKey, Model, data) {
     }
   });
 }
+/**
+ *
+ * @param {String} cacheKey
+ * @param {MongoModel} Model
+ * @param {{searchField, otherSearchField}} search
+ * @param {{fields, othersFields }} updateFields
+ * @returns
+ */
+function updateDataInModel(cacheKey, Model, search, updateFields) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await redis.del(cacheKey);
+      Logger.redisCacheRemove(cacheKey);
 
-module.exports = { getDataFromCache, setDataInModel };
+      const updatedModel = await Model.findOneAndUpdate(search, updateFields, {
+        new: true,
+      });
+
+      Logger.mongoUpdatedModel(
+        Model.collection.collectionName,
+        updatedModel._id
+      );
+      resolve(updatedModel);
+    } catch (error) {
+      Logger.error(error);
+      reject(error);
+    }
+  });
+}
+
+function deleteDocumentInModel(cacheKey, Model, search) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await redis.del(cacheKey);
+      Logger.redisCacheRemove(cacheKey);
+
+      const deletedModel = await Model.deleteOne(search);
+
+      Logger.mongoDeletedModel(
+        Model.collection.collectionName,
+        deletedModel._id ?? -1
+      );
+      resolve(deletedModel);
+    } catch (error) {
+      Logger.error(error);
+      reject(error);
+    }
+  });
+}
+
+module.exports = {
+  getDataFromCache,
+  setDataInModel,
+  updateDataInModel,
+  deleteDocumentInModel,
+};

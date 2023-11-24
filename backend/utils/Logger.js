@@ -44,7 +44,17 @@ class Logger {
 
   static mongoNewModel(modelName, newModelId) {
     this.log(
-      `${fontBrightGreen}MongoDB ${fontWhite}new document created from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
+      `${fontBrightGreen}MongoDB ${fontWhite}new document ${fontBrightGreen}created${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
+    );
+  }
+  static mongoUpdatedModel(modelName, newModelId) {
+    this.log(
+      `${fontBrightGreen}MongoDB ${fontWhite}document ${fontBrightYellow}updated${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
+    );
+  }
+  static mongoDeletedModel(modelName, newModelId) {
+    this.log(
+      `${fontBrightGreen}MongoDB ${fontWhite}document ${fontBrightRed}deleted${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
     );
   }
 
