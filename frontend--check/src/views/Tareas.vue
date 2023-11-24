@@ -1,3 +1,7 @@
+/*
+@filtrar-favoritas="filtroActual.favorita = $event"
+@filtrar-completadas="filtroActual.completada = $event"
+*/
 <template>
   <main class="bg-gray-900">
     <Header
@@ -10,13 +14,14 @@
       class="flex min-h-screen items-center"
       :tareas="tareasFiltradas"
       @enviarDatos="crearTarea"
+      @completar-tarea="completarTarea($event)"
+      @favorita-tarea="marcarFavorita($event)"
     ></ListaTareas>
   </main>
 </template>
 
 <script lang="ts">
-import VueRouter, { NavigationGuard } from "vue-router";
-import Vue from "vue";
+
 import "../assets/main.css";
 import ListaTareas from "../components/ListaTareas.vue";
 import Header from "../components/Header.vue";
@@ -26,8 +31,9 @@ type Tarea = {
   titulo: string;
   categoria: string;
   description: string;
-  dueDate: Date;
-  completed: boolean;
+  fecha: Date;
+  completada: boolean;
+  favorita : boolean;
 };
 
 
@@ -44,30 +50,35 @@ export default {
           titulo: "Hacer la compra",
           categoria: "Evento",
           description: "Comprar alimentos y productos de primera necesidad.",
-          dueDate: new Date("2023-12-31"),
-          completed: false,
+          fecha: new Date("2023-12-31"),
+          completada: false,
+          favorita: false,
         },
         {
           id: 2,
           titulo: "Hacer ejercicio",
           categoria: "Deportes",
           description: "Realizar ejercicio físico durante al menos 30 minutos.",
-          dueDate: new Date("2023-11-31"),
-          completed: false,
+          fecha: new Date("2023-11-31"),
+          completada: false,
+          favorita: false,
         },
         {
           id: 3,
           titulo: "Leer un libro",
           categoria: "Entretenimiento",
           description: "Leer al menos un capítulo de un libro interesante.",
-          dueDate: new Date("2023-10-31"),
-          completed: false,
+          fecha: new Date("2023-10-31"),
+          completada: false,
+          favorita: false,
         },
       ] as Tarea[],
       tareasFiltradas: [] as Tarea[],
       filtroActual: {
         categoria: "Todas",
         orden: "Titulo de A - Z",
+        completada: false,
+        favorita: false,
       },
       ordenes: [
         "Titulo de A - Z",
@@ -106,12 +117,12 @@ export default {
           break;
         case "Fecha Ascendente":
           this.tareasFiltradas.sort(
-            (a, b) => a.dueDate.getTime() - b.dueDate.getTime()
+            (a, b) => a.fecha.getTime() - b.fecha.getTime()
           );
           break;
         case "Fecha Descendente":
           this.tareasFiltradas.sort(
-            (a, b) => b.dueDate.getTime() - a.dueDate.getTime()
+            (a, b) => b.fecha.getTime() - a.fecha.getTime()
           );
           break;
       }
@@ -127,10 +138,26 @@ export default {
         titulo: tarea.titulo,
         categoria: tarea.categoria,
         description: tarea.descripcion,
-        dueDate: new Date(tarea.fecha),
-        completed: false,
+        fecha: new Date(tarea.fecha),
+        completada: false,
+        favorita: false,
       });
       this.filtrarYOrdenarTareas();
+    },
+    completarTarea(id: number) {
+      const tarea = this.tareas.find((tarea) => tarea.id === id);
+      console.log(tarea);
+      
+      if (tarea) {
+        tarea.completada = !tarea.completada;
+      }
+    },
+    marcarFavorita(id: number) {
+      const tarea = this.tareas.find((tarea) => tarea.id === id);
+
+      if (tarea) {
+        tarea.favorita = !tarea.favorita;
+      }
     },
   },
   watch: {

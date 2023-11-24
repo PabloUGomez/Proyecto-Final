@@ -15,7 +15,7 @@
           + Agregar tarea
         </h3>
       </div>
-      <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea"></Tarea>
+      <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea" @completar-tarea="completarTarea" @favorita-tarea="marcarFavorita"></Tarea>
     </ul>
   </div>
 </template>
@@ -36,8 +36,9 @@ export default {
         name: string;
         categoria: string;
         description: string;
-        dueDate: Date;
-        completed: boolean;
+        fecha: Date;
+        completada: boolean,
+        favorita: boolean,
       }>,
       required: true,
     },
@@ -59,13 +60,23 @@ export default {
       categoria: string;
       fecha: string;
       descripcion: string;
+      completada: boolean;
+      favorita: boolean;
     }) {
       this.$emit("enviarDatos", {
         titulo: tarea.titulo,
         categoria: tarea.categoria,
         fecha: tarea.fecha,
         descripcion: tarea.descripcion,
+        completada: false,
+        favorita: false,
       });
+    },
+    completarTarea(id: number) {
+      this.$emit("completar-tarea", id);
+    },
+    marcarFavorita(id: number) {
+      this.$emit("favorita-tarea", id);
     },
   },
 };
