@@ -20,5 +20,6 @@
   "vueCompilerOptions": {
     "target": 2
   },
-  "include": ["vite.config.*", "env.d.ts", "src/**/*", "src/**/*.vue"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx", "shims-tsx.d.ts"],
+  "exclude": ["node_modules"]
 }

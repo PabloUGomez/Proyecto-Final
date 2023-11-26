@@ -10,6 +10,7 @@
         <div class="ml-2 flex">
           <div
             class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 hover:bg-indigo-600"
+            @click="filtrarCompletadas"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -28,6 +29,7 @@
           </div>
           <div
             class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 hover:bg-indigo-600"
+            @click="filtrarFavorita"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -150,8 +152,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {auth} from "../firebaseConfig";
-import {signOut} from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { signOut } from "firebase/auth";
 
 export default Vue.extend({
   props: {
@@ -176,10 +178,12 @@ export default Vue.extend({
       e.removeAttribute("open");
     },
     obtenerCategoriasUnicas() {
-      const categoriasSet = new Set(
-        this.tareas.map((tarea) => tarea.categoria)
-      );
-      return Array.from(categoriasSet);
+      if (this.tareas != null) {
+        const categoriasSet = new Set(
+          this.tareas.map((tarea) => tarea.categoria)
+        );
+        return Array.from(categoriasSet);
+      }
     },
     filtrarTarea(filtro: string) {
       this.$emit("filtrar-tareas", filtro);
@@ -187,12 +191,18 @@ export default Vue.extend({
     ordenarTareas(orden: string) {
       this.$emit("ordenar-tareas", orden);
     },
+    filtrarFavorita() {
+      this.$emit("filtrar-favoritas");
+    },
+    filtrarCompletadas() {
+      this.$emit("filtrar-completadas");
+    },
     cerrarSesion() {
       signOut(auth)
         .then(() => {
           this.$router.push("/Login");
         })
-        .catch((error:any) => {
+        .catch((error: any) => {
           console.error("Error al cerrar sesión:", error.message);
         });
     },

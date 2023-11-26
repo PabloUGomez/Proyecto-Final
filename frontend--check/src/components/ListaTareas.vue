@@ -33,7 +33,7 @@ export default {
     tareas: {
       type: Array as () => Array<{
         id: number;
-        name: string;
+        titulo: string;
         categoria: string;
         description: string;
         fecha: Date;
@@ -58,15 +58,13 @@ export default {
     crearTarea(tarea: {
       titulo: string;
       categoria: string;
-      fecha: string;
       descripcion: string;
       completada: boolean;
       favorita: boolean;
-    }) {
+    }) {      
       this.$emit("enviarDatos", {
         titulo: tarea.titulo,
         categoria: tarea.categoria,
-        fecha: tarea.fecha,
         descripcion: tarea.descripcion,
         completada: false,
         favorita: false,

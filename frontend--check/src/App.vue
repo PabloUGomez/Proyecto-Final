@@ -1,5 +1,8 @@
-<script>
+<script lang="ts">
 import "./assets/main.css";
+import Vue from "vue";
+
+export default class App extends Vue {}
 </script>
 
 <template>
@@ -8,4 +11,3 @@ import "./assets/main.css";
   </div>
 </template>
 
-<style></style>
