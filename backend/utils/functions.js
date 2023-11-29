@@ -1,7 +1,10 @@
 const Logger = require("./Logger.js");
 const Redis = require("ioredis");
 
-const redis = new Redis();
+const redis = new Redis({
+  port: 63790, // Redis port
+  host: "127.0.0.1", // Redis host
+});
 
 function getDataFromCache(cacheKey, Model) {
   return new Promise(async (resolve, reject) => {

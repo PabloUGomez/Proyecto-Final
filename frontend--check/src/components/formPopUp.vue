@@ -30,23 +30,9 @@
               >
                 <option value="Evento">Evento</option>
                 <option value="Entretenimiento">Entretenimiento</option>
-                <option value="Deportes">Entretenimiento</option>
+                <option value="Deportes">Deportes</option>
             </select>
             
-            </div>
-            <div class="mb-5">
-              <label
-                class="mb-3 block text-base font-medium text-[#07074D]"
-              >
-                Fecha
-              </label>
-              <input
-                type="date"
-                id="fecha"
-                v-model="fecha"
-                class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                required
-              />
             </div>
             <div class="mb-5">
               <label
@@ -88,7 +74,6 @@
     return {
       titulo: '',
       categoria: 'Evento',
-      fecha: '',
       descripcion: '',
     };
     },
@@ -96,13 +81,10 @@
       cerrar() {
         this.$emit('cerrar');
       },
-      enviarDatos() { 
-        console.log('enviando datos');
-        
+      enviarDatos() {     
         this.$emit('enviarDatos', {
         titulo: this.titulo,
         categoria: this.categoria,
-        fecha: this.fecha,
         descripcion: this.descripcion,
       });
       this.cerrar();

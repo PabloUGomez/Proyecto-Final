@@ -10,7 +10,6 @@ const {
 
 const Task = require("../models/Task.js");
 const Redis = require("ioredis");
-
 const redis = new Redis();
 
 const keyRedisTask = "task";
@@ -27,18 +26,22 @@ const taskController = {
   store: async (request, response) => {
     Logger.routerLog(request, "POST", "taskController", "store");
 
-    const { userId, title, description, isComplete } = request.body;
-    const data = {
+    const { userId, titulo, categoria, descripcion, fecha } = req.body;
+    const nuevoTask = new Task({
       userId,
-      title,
-      description,
-      isComplete,
-    };
+      titulo,
+      categoria,
+      descripcion,
+      fecha,
+      completada: false,
+      favorita: false,
+    });
 
-    setDataInModel(keyRedisTask, Task, data)
+    setDataInModel(keyRedisTask, Task, nuevoTask)
       .then((task) => response.status(201).json(task))
-      .catch((error) => response.status(500).send(error));
+      .catch((error) => response.status(500).send("Error al guardar la tarea"));
   },
+
   update: async (request, response) => {
     Logger.routerLog(request, "PUT", "taskController", "update");
 

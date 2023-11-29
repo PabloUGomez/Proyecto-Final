@@ -68,7 +68,7 @@
             .then ((credenciales)=>{
                 const user = credenciales.user;
                 this.$router.push('/Tareas')
-            })
+            })  
             .catch((error)=>{
                 console.log(error);
             });
