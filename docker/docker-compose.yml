@@ -1,0 +1,41 @@
+version: "2"
+services:
+  node_server:
+    container_name: node
+    build:
+      context: ./js
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:5500"
+    volumes:
+      - ./../backend:/usr/app/
+    networks:
+      - network-1
+
+  redis:
+    image: redis
+    container_name: redis
+    # restart: always
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 63790:6379
+    networks:
+      - network-1
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - network-1
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+networks:
+  network-1:
+
+volumes:
+  redis_volume_data:
