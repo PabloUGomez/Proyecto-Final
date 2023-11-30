@@ -6,6 +6,7 @@ import router from "./router";
 
 Vue.use(VueCompositionAPI);
 
+
 const app = createApp({
   router,
   render: () => h(App),

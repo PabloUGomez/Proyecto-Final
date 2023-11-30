@@ -15,7 +15,7 @@
           + Agregar tarea
         </h3>
       </div>
-      <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea" @completar-tarea="completarTarea" @favorita-tarea="marcarFavorita"></Tarea>
+      <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea" @completar-tarea="completarTarea" @favorita-tarea="marcarFavorita" @borrar-tarea="borrarTarea"></Tarea>
     </ul>
   </div>
 </template>
@@ -23,6 +23,7 @@
 <script lang="ts">
 import Tarea from "./Tarea.vue";
 import formPopUp from "./formPopUp.vue";
+import { DateTime } from "luxon";
 
 export default {
   components: {
@@ -32,10 +33,10 @@ export default {
   props: {
     tareas: {
       type: Array as () => Array<{
-        id: number;
+        _id: number;
         titulo: string;
         categoria: string;
-        description: string;
+        descripcion: string;
         fecha: Date;
         completada: boolean,
         favorita: boolean,
@@ -66,15 +67,19 @@ export default {
         titulo: tarea.titulo,
         categoria: tarea.categoria,
         descripcion: tarea.descripcion,
+        fecha: DateTime.local().toFormat("dd-MM-yyyy HH:mm"),
         completada: false,
         favorita: false,
       });
     },
-    completarTarea(id: number) {
-      this.$emit("completar-tarea", id);
+    completarTarea(_id: number) {
+      this.$emit("completar-tarea", _id);
     },
-    marcarFavorita(id: number) {
-      this.$emit("favorita-tarea", id);
+    marcarFavorita(_id: number) {
+      this.$emit("favorita-tarea", _id);
+    },
+    borrarTarea(_id: number) {
+      this.$emit("borrar-tarea", _id);
     },
   },
 };
