@@ -7,14 +7,20 @@ const Redis = require("ioredis");
 
 const redis = new Redis(env.REDIS_HOST);
 
-function getDataFromCache(cacheKey, Model) {
+const REDIS_CACHE_EXPIRATION = 60;
+
+function getDataFromCache(cacheKey, Model, userId) {
   return new Promise(async (resolve, reject) => {
     try {
       let data = await redis.get(cacheKey);
       if (!data) {
-        data = await Model.find();
-        await redis.setex(cacheKey, 5, JSON.stringify(data));
-        Logger.redisCacheSet(cacheKey);
+        data = await Model.find({ userId: userId });
+        await redis.setex(
+          cacheKey + "-" + userId,
+          REDIS_CACHE_EXPIRATION,
+          JSON.stringify(data)
+        );
+        Logger.redisCacheSet(cacheKey + "-" + userId);
         resolve(data);
         return;
       }
@@ -26,13 +32,13 @@ function getDataFromCache(cacheKey, Model) {
   });
 }
 
-function setDataInModel(cacheKey, Model, data) {
+function setDataInModel(cacheKey, Model, userId, data) {
   return new Promise(async (resolve, reject) => {
     try {
       const newModel = new Model(data);
       await newModel.save();
-      await redis.del(cacheKey);
-      Logger.redisCacheRemove(cacheKey);
+      await redis.del(cacheKey + "-" + userId);
+      Logger.redisCacheRemove(cacheKey + "-" + userId);
       Logger.mongoNewModel(Model.collection.collectionName, newModel._id);
       resolve(newModel);
     } catch (error) {

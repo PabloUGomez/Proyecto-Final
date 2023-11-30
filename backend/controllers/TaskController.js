@@ -20,16 +20,29 @@ const keyRedisTask = "task";
 const taskController = {
   index: async (request, response) => {
     Logger.routerLog(request, "GET", "taskController", "index");
+    const userId = request.headers["auth"];
 
-    getDataFromCache(keyRedisTask, Task)
-      .then((tasks) => response.json(tasks))
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
+    getDataFromCache(keyRedisTask, Task, userId)
+      .then((tasks) => response.status(200).json(tasks))
       .catch((error) => response.status(500).send(error));
   },
 
   store: async (request, response) => {
     Logger.routerLog(request, "POST", "taskController", "store");
 
-    const { userId, titulo, categoria, descripcion, fecha } = req.body;
+    const userId = request.headers["auth"];
+
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
+    const { titulo, categoria, descripcion, fecha } = request.body;
     const nuevoTask = new Task({
       userId,
       titulo,
@@ -40,7 +53,7 @@ const taskController = {
       favorita: false,
     });
 
-    setDataInModel(keyRedisTask, Task, nuevoTask)
+    setDataInModel(keyRedisTask, Task, userId, nuevoTask)
       .then((task) => response.status(201).json(task))
       .catch((error) => response.status(500).send("Error al guardar la tarea"));
   },

@@ -1,26 +1,39 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE_URL = 'http://127.0.0.1:3000/api/tasks';
+const API_BASE_URL = "http://127.0.0.1:3000/api/tasks";
+//const API_BASE_URL = "http://181.31.20.146:33333/api/tasks";
 
 export default {
-  async obtenerTareas() {
+  async obtenerTareas(uid: string) {
     try {
-      const response = await axios.get(API_BASE_URL);
-      return response.data;    
+      const response = await axios.get(API_BASE_URL, {
+        headers: {
+          auth: uid,
+        },
+      });
+      return response.data;
     } catch (error) {
-      throw new Error('Error al obtener las tareas');
+      throw new Error("Error al obtener las tareas");
     }
   },
 
   async crearTarea(userId: string, tarea: any) {
     try {
-      const response = await axios.post(API_BASE_URL, {
-        userId,
-        ...tarea,
-      });
+      const response = await axios.post(
+        API_BASE_URL,
+        {
+          userId,
+          ...tarea,
+        },
+        {
+          headers: {
+            auth: userId,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
-      throw new Error('Error al crear la tarea');
+      throw new Error("Error al crear la tarea");
     }
   },
 
@@ -29,7 +42,7 @@ export default {
       const response = await axios.put(`${API_BASE_URL}/${id}`, tarea);
       return response.data;
     } catch (error) {
-      throw new Error('Error al actualizar la tarea');
+      throw new Error("Error al actualizar la tarea");
     }
   },
 
@@ -38,7 +51,7 @@ export default {
       const response = await axios.delete(`${API_BASE_URL}/${id}`);
       return response.data;
     } catch (error) {
-      throw new Error('Error al borrar la tarea');
+      throw new Error("Error al borrar la tarea");
     }
   },
 };

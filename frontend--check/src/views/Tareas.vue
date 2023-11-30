@@ -18,7 +18,7 @@
       @favorita-tarea="marcarFavorita($event)"
       @borrar-tarea="borrarTarea($event)"
     ></ListaTareas>
-    <Alerta v-if="textoAlerta!=''" :texto="textoAlerta" />
+    <Alerta v-if="textoAlerta != ''" :texto="textoAlerta" />
   </main>
 </template>
 
@@ -46,8 +46,8 @@ export default {
   components: {
     ListaTareas,
     Header,
-    Alerta
-},
+    Alerta,
+  },
   data() {
     return {
       userId: auth.currentUser?.uid as string,
@@ -127,12 +127,11 @@ export default {
       }
     },
     async cargarTareas() {
-      
       try {
-        this.tareas = await tareaServices.obtenerTareas();
+        //s
+        this.tareas = await tareaServices.obtenerTareas(auth.currentUser.uid);
         this.filtrarYOrdenarTareas();
         console.log(this.tareas);
-
       } catch (error) {
         console.error(error.message);
       }
