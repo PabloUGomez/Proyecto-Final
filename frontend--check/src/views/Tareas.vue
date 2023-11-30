@@ -16,7 +16,9 @@
       @enviarDatos="crearTarea"
       @completar-tarea="completarTarea($event)"
       @favorita-tarea="marcarFavorita($event)"
+      @borrar-tarea="borrarTarea($event)"
     ></ListaTareas>
+    <Alerta v-if="textoAlerta!=''" :texto="textoAlerta" />
   </main>
 </template>
 
@@ -25,15 +27,16 @@ import "../assets/main.css";
 import ListaTareas from "../components/ListaTareas.vue";
 import Header from "../components/Header.vue";
 import { auth } from "../firebaseConfig";
-import axios from "axios";
+import tareaServices from "../services/tareaServices";
 import { DateTime } from "luxon";
+import Alerta from "../components/Alerta.vue";
 
 type Tarea = {
+  _id: string;
   userId: string;
-  id: number;
   titulo: string;
   categoria: string;
-  description: string;
+  descripcion: string;
   fecha: Date;
   completada: boolean;
   favorita: boolean;
@@ -43,7 +46,8 @@ export default {
   components: {
     ListaTareas,
     Header,
-  },
+    Alerta
+},
   data() {
     return {
       userId: auth.currentUser?.uid as string,
@@ -61,6 +65,7 @@ export default {
         "Fecha Ascendente",
         "Fecha Descendente",
       ],
+      textoAlerta: "",
     };
   },
   async mounted() {
@@ -122,14 +127,17 @@ export default {
       }
     },
     async cargarTareas() {
+      
       try {
-        const response = await axios.get("http://127.0.0.1:3000/api/tasks");
-        this.tareas = response.data;
+        this.tareas = await tareaServices.obtenerTareas();
         this.filtrarYOrdenarTareas();
+        console.log(this.tareas);
+
       } catch (error) {
-        console.error("Error al obtener las tareas:", error);
+        console.error(error.message);
       }
     },
+
     async crearTarea(tarea: {
       titulo: string;
       categoria: string;
@@ -137,30 +145,45 @@ export default {
       descripcion: string;
     }) {
       try {
-        const response = (await axios.post("http://127.0.0.1:3000/api/tasks", {
-          userId: this.userId,
-          id: this.tareas.length + 1,
-          titulo: tarea.titulo,
-          categoria: tarea.categoria,
-          descripcion: tarea.descripcion,
-          fecha: DateTime.local().toFormat("dd-MM-yyyy HH:mm"),
-        })) as Tarea;
-
+        await tareaServices.crearTarea(this.userId, tarea);
         // Después de crear la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
+        this.textoAlerta = "Tarea creada con exito";
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        this.textoAlerta = "";
       } catch (error) {
-        console.error("Error al crear la tarea:", error);
+        console.error(error.message);
       }
     },
-    completarTarea(id: number) {
-      const tarea = this.tareas.find((tarea) => tarea.id === id);
+
+    async actualizarTarea(_id: number, tarea: any) {
+      try {
+        await tareaServices.actualizarTarea(_id, tarea);
+        // Después de actualizar la tarea, vuelve a cargar las tareas
+        await this.cargarTareas();
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+
+    async borrarTarea(_id: number) {
+      try {
+        await tareaServices.borrarTarea(_id);
+        // Después de borrar la tarea, vuelve a cargar las tareas
+        await this.cargarTareas();
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+    completarTarea(_id: number) {
+      const tarea = this.tareas.find((tarea) => tarea._id === _id);
 
       if (tarea) {
         tarea.completada = !tarea.completada;
       }
     },
-    marcarFavorita(id: number) {
-      const tarea = this.tareas.find((tarea) => tarea.id === id);
+    marcarFavorita(_id: number) {
+      const tarea = this.tareas.find((tarea) => tarea._id === _id);
 
       if (tarea) {
         tarea.favorita = !tarea.favorita;
