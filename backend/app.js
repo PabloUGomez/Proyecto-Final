@@ -15,7 +15,7 @@ const Logger = require("./utils/Logger.js");
 const routes = require("./routes/index.js");
 
 //MongoDB Connection
-const mongoURL = `mongodb://${env.MONGO_USER}:${env.MONGO_PASSWORD}@${env.MONGO_HOST}:${env.MONGO_PORT}/${env.MONGO_DB}?authMechanism=DEFAULT`;
+const mongoURL = `mongodb://${env.MONGO_USER}:${env.MONGO_PASSWORD}@${env.MONGO_HOST}:${env.MONGO_PORT}/?authMechanism=DEFAULT`;
 
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,

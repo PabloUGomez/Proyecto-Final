@@ -1,3 +1,6 @@
+//Env
+require("dotenv").config();
+const env = process.env;
 //Logger
 const Logger = require("./../utils/Logger.js");
 //RedisCache
@@ -10,7 +13,7 @@ const {
 
 const Task = require("../models/Task.js");
 const Redis = require("ioredis");
-const redis = new Redis();
+const redis = new Redis(env.REDIS_HOST);
 
 const keyRedisTask = "task";
 
