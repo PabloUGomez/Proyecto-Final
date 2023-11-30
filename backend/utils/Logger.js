@@ -35,16 +35,43 @@ class Logger {
     this.log(`${fontCyan}${Array(process.stdout.columns ?? 30).join("-")}`);
   }
 
-  static routerLog(req, controllerName, functionName) {
+  static routerLog(req, method, controllerName, functionName) {
     this.dividerCyan();
     this.log(
-      `${fontCyan}${req.originalUrl}${fontBlue} => ${fontCyan}${controllerName}${fontBlue}.${fontCyan}${functionName}()`
+      `${fontBrightBlue}[${method}] ${fontCyan}${req.originalUrl}${fontBrightBlue} => ${fontCyan}${controllerName}${fontBrightBlue}.${fontCyan}${functionName}()`
+    );
+  }
+
+  static mongoNewModel(modelName, newModelId) {
+    this.log(
+      `${fontBrightGreen}MongoDB ${fontWhite}new document ${fontBrightGreen}created${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
+    );
+  }
+  static mongoUpdatedModel(modelName, newModelId) {
+    this.log(
+      `${fontBrightGreen}MongoDB ${fontWhite}document ${fontBrightYellow}updated${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
+    );
+  }
+  static mongoDeletedModel(modelName, newModelId) {
+    this.log(
+      `${fontBrightGreen}MongoDB ${fontWhite}document ${fontBrightRed}deleted${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
     );
   }
 
   static redisCacheSet(cacheKey) {
     this.log(
-      `${fontRed}Redis ${fontGreen}cache setted with key name: ${fontYellow}${cacheKey}`
+      `${fontRed}Redis ${fontWhite}cache setted with key name: ${fontYellow}${cacheKey}`
+    );
+  }
+
+  static redisCacheSet(cacheKey) {
+    this.log(
+      `${fontRed}Redis ${fontWhite}cache setted with key name: ${fontYellow}${cacheKey}`
+    );
+  }
+  static redisCacheRemove(cacheKey) {
+    this.log(
+      `${fontRed}Redis ${fontWhite}cache deleted with key name: ${fontYellow}${cacheKey}`
     );
   }
 
