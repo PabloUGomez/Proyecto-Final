@@ -45,6 +45,7 @@
                 </router-link>
             </p>
         </form>
+        <Alerta v-if="error" :texto='textoAlerta'/>
     </main>
 </template>
 
@@ -53,24 +54,31 @@
     import  Vue from 'vue';
     import {auth} from '../firebaseConfig';
     import {signInWithEmailAndPassword } from 'firebase/auth'
+    import Alerta from '../components/Alerta.vue'
 
     export default Vue.extend({
         data() {
             return {
                 email: '',
                 password: '',
+                error: false,
+                textoAlerta: 'Credenciales invalidas, intenta nuevamente.',
             };
+        },
+        components: {
+            Alerta
         },
         methods: {
             iniciarSesion() {                 
-            //validaciones extra           
             signInWithEmailAndPassword(auth, this.email,this.password)
-            .then ((credenciales)=>{
-                const user = credenciales.user;
+            .then (()=>{
                 this.$router.push('/Tareas')
             })  
-            .catch((error)=>{
-                console.log(error);
+            .catch(()=>{
+                this.error = true
+                setTimeout(() => {
+                    this.error = false
+                }, 3000);
             });
             },
         },
