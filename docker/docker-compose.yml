@@ -6,7 +6,7 @@ services:
       context: ../backend
       dockerfile: Dockerfile.dev
     ports:
-      - "3010:5500"
+      - "3001:5500"
     volumes:
       - ../backend:/usr/app/
     networks:
@@ -19,7 +19,7 @@ services:
       context: ../backend
       dockerfile: Dockerfile.dev
     ports:
-      - "3011:5500"
+      - "3002:5500"
     volumes:
       - ../backend:/usr/app/
     networks:
