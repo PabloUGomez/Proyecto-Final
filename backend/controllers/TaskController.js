@@ -72,7 +72,7 @@ const taskController = {
     const taskId = request.params.id;
 
     //Body
-    const { userId, titulo, descripcion, categoria } = request.body;
+    const {titulo, descripcion, categoria } = request.body;
 
     const filter = { _id: taskId, userId: userId };
 
