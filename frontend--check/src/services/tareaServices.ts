@@ -39,16 +39,24 @@ export default {
 
   async actualizarTarea(id: number, tarea: any) {
     try {
-      const response = await axios.put(`${API_BASE_URL}/${id}`, tarea);
+      const response = await axios.put(`${API_BASE_URL}/${id}`, tarea, {
+        headers: {
+          auth: tarea.userId,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error("Error al actualizar la tarea");
     }
   },
 
-  async borrarTarea(id: number) {
+  async borrarTarea(userId: string, id: number) {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/${id}`);
+      const response = await axios.delete(`${API_BASE_URL}/${id}`, {
+        headers: {
+          auth: userId,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error("Error al borrar la tarea");

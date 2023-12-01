@@ -5,6 +5,9 @@
       v-if="mostrar"
       @cerrar="cerrarFormulario"
       @enviarDatos="crearTarea"
+      :titulo="titulo"
+      :descripcion="descripcion"
+      :categoria="categoria"
     />
     <ul class="p-4 md:w-2/3 xl:w-1/2 w-full mx-auto">
       <div
@@ -15,7 +18,15 @@
           + Agregar tarea
         </h3>
       </div>
-      <Tarea v-for="tarea in tareas" :key="tarea.id" :tarea="tarea" @completar-tarea="completarTarea" @favorita-tarea="marcarFavorita" @borrar-tarea="borrarTarea"></Tarea>
+      <Tarea
+        v-for="tarea in tareas"
+        :key="tarea.id"
+        :tarea="tarea"
+        @completar-tarea="completarTarea"
+        @favorita-tarea="marcarFavorita"
+        @borrar-tarea="borrarTarea"
+        @actualizar-tarea="actualizarTarea"
+      ></Tarea>
     </ul>
   </div>
 </template>
@@ -38,8 +49,8 @@ export default {
         categoria: string;
         descripcion: string;
         fecha: Date;
-        completada: boolean,
-        favorita: boolean,
+        completada: boolean;
+        favorita: boolean;
       }>,
       required: true,
     },
@@ -47,6 +58,9 @@ export default {
   data() {
     return {
       mostrar: false,
+      titulo: "",
+      descripcion: "",
+      categoria: "",
     };
   },
   methods: {
@@ -62,7 +76,7 @@ export default {
       descripcion: string;
       completada: boolean;
       favorita: boolean;
-    }) {      
+    }) {
       this.$emit("enviarDatos", {
         titulo: tarea.titulo,
         categoria: tarea.categoria,
@@ -80,6 +94,19 @@ export default {
     },
     borrarTarea(_id: number) {
       this.$emit("borrar-tarea", _id);
+    },
+    actualizarTarea(
+      _id: number,
+      titulo: string,
+      descripcion: string,
+      categoria: string
+    ) {
+      this.mostrarFormulario();
+      this.titulo = titulo;
+      this.descripcion = descripcion;
+      this.categoria = categoria;
+
+      //this.$emit("actualizar-tarea", _id);
     },
   },
 };
