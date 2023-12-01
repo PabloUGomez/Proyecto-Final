@@ -4,15 +4,8 @@
       class="z-10"
       v-if="mostrar"
       @cerrar="cerrarFormulario"
-<<<<<<< HEAD
-      @enviarDatos="crearTarea"
-      :titulo="titulo"
-      :descripcion="descripcion"
-      :categoria="categoria"
-=======
       @enviarDatos="crearEditarTarea"
       :tareaAEditar="tareaAEditar"
->>>>>>> Pablo
     />
     <ul class="p-4 md:w-2/3 xl:w-1/2 w-full mx-auto">
       <div
@@ -23,17 +16,6 @@
           + Agregar tarea
         </h3>
       </div>
-<<<<<<< HEAD
-      <Tarea
-        v-for="tarea in tareas"
-        :key="tarea.id"
-        :tarea="tarea"
-        @completar-tarea="completarTarea"
-        @favorita-tarea="marcarFavorita"
-        @borrar-tarea="borrarTarea"
-        @actualizar-tarea="actualizarTarea"
-      ></Tarea>
-=======
         <Tarea
           v-for="tarea in tareas"
           :key="tarea._id"
@@ -43,7 +25,6 @@
           @borrar-tarea="borrarTarea"
           @editar-tarea="editarTarea"
         />
->>>>>>> Pablo
     </ul>
   </div>
 </template>
@@ -75,11 +56,6 @@ export default {
   data() {
     return {
       mostrar: false,
-<<<<<<< HEAD
-      titulo: "",
-      descripcion: "",
-      categoria: "",
-=======
       tareaAEditar: {
         _id: "",
         titulo: "",
@@ -91,7 +67,6 @@ export default {
         categoria: string;
         descripcion: string;
       },
->>>>>>> Pablo
     };
   },
   methods: {
@@ -131,11 +106,6 @@ export default {
       titulo: string;
       categoria: string;
       descripcion: string;
-<<<<<<< HEAD
-      completada: boolean;
-      favorita: boolean;
-=======
->>>>>>> Pablo
     }) {
       this.$emit("enviarDatos", {
         titulo: tarea.titulo,
@@ -155,20 +125,6 @@ export default {
     borrarTarea(_id: string) {
       this.$emit("borrar-tarea", _id);
     },
-<<<<<<< HEAD
-    actualizarTarea(
-      _id: number,
-      titulo: string,
-      descripcion: string,
-      categoria: string
-    ) {
-      this.mostrarFormulario();
-      this.titulo = titulo;
-      this.descripcion = descripcion;
-      this.categoria = categoria;
-
-      //this.$emit("actualizar-tarea", _id);
-=======
     editarTarea(
       _id: string,
       titulo: string,
@@ -180,7 +136,6 @@ export default {
       this.tareaAEditar.categoria = categoria;
       this.tareaAEditar.descripcion = descripcion;
       this.mostrar = true;
->>>>>>> Pablo
     },
   },
 };
