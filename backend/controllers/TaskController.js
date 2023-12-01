@@ -72,14 +72,12 @@ const taskController = {
     const taskId = request.params.id;
 
     //Body
-    const {titulo, descripcion, categoria } = request.body;
+    const { titulo, descripcion, categoria } = request.body;
 
     const filter = { _id: taskId, userId: userId };
 
     const updateFields = { titulo, descripcion, categoria };
-
-    console.log(filter, updateFields);
-    updateDataInModel(keyRedisTask, Task, filter, updateFields)
+    updateDataInModel(keyRedisTask, Task, userId, filter, updateFields)
       .then((updatedTask) => response.status(201).json(updatedTask))
       .catch((error) => response.status(500).send(error));
   },
@@ -97,11 +95,58 @@ const taskController = {
     const taskId = request.params.id;
 
     //Body
-    console.log(request.headers);
-    console.log(taskId, userId);
     const filter = { _id: taskId, userId: userId };
 
-    deleteDocumentInModel(keyRedisTask, Task, filter)
+    deleteDocumentInModel(keyRedisTask, Task, userId, filter)
+      .then((updatedTask) => response.status(201).json(updatedTask))
+      .catch((error) => response.status(500).send(error));
+  },
+
+  setFavorite: async (request, response) => {
+    Logger.routerLog(request, "PUT", "taskController", "setFavorite");
+
+    const userId = request.headers["auth"];
+
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
+    //Parameters
+    const taskId = request.params.id;
+
+    //Body
+    const { favorita } = request.body;
+
+    const filter = { _id: taskId, userId: userId };
+
+    const updateFields = { favorita };
+
+    updateDataInModel(keyRedisTask, Task, userId, filter, updateFields)
+      .then((updatedTask) => response.status(201).json(updatedTask))
+      .catch((error) => response.status(500).send(error));
+  },
+  setComplete: async (request, response) => {
+    Logger.routerLog(request, "PUT", "taskController", "setComplete");
+
+    const userId = request.headers["auth"];
+
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
+    //Parameters
+    const taskId = request.params.id;
+
+    //Body
+    const { completada } = request.body;
+
+    const filter = { _id: taskId, userId: userId };
+
+    const updateFields = { completada };
+
+    updateDataInModel(keyRedisTask, Task, userId, filter, updateFields)
       .then((updatedTask) => response.status(201).json(updatedTask))
       .catch((error) => response.status(500).send(error));
   },

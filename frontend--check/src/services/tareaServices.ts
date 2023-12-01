@@ -45,7 +45,19 @@ export default {
     descripcion: string
   ) {
     try {
-      const response = await axios.put(`${API_BASE_URL}/${id}`, {userId, titulo, categoria, descripcion});
+      const response = await axios.put(
+        `${API_BASE_URL}/${id}`,
+        {
+          titulo,
+          categoria,
+          descripcion,
+        },
+        {
+          headers: {
+            auth: userId,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error("Error al actualizar la tarea");
@@ -53,8 +65,6 @@ export default {
   },
 
   async borrarTarea(id: string, userId: string) {
-    console.log(userId);
-
     try {
       const response = await axios.delete(`${API_BASE_URL}/${id}`, {
         headers: {
@@ -65,6 +75,44 @@ export default {
       return response.data;
     } catch (error) {
       throw new Error("Error al borrar la tarea");
+    }
+  },
+
+  async favoritaTarea(userId: string, id: string, favorita: boolean) {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/${id}/favorita`,
+        {
+          favorita,
+        },
+        {
+          headers: {
+            auth: userId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Error al actualizar la tarea");
+    }
+  },
+
+  async completadaTarea(userId: string, id: string, completada: boolean) {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/${id}/completada`,
+        {
+          completada,
+        },
+        {
+          headers: {
+            auth: userId,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Error al actualizar la tarea");
     }
   },
 };

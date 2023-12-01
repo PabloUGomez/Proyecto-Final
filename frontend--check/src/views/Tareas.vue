@@ -61,17 +61,17 @@ export default {
         completadas: false,
         favoritas: false,
       } as {
-          categoria: string;
-          orden: string;
-          completadas: boolean;
-          favoritas: boolean;
-        },
+        categoria: string;
+        orden: string;
+        completadas: boolean;
+        favoritas: boolean;
+      },
       ordenes: [
         "Titulo de A - Z",
         "Titulo de Z - A",
         "Fecha Ascendente",
         "Fecha Descendente",
-    ] as string[] ,
+      ] as string[],
       textoAlerta: "" as string,
     };
   },
@@ -82,17 +82,21 @@ export default {
     filtrarYOrdenarTareas() {
       const { categoria, orden, completadas, favoritas } = this.filtroActual;
       if (categoria !== "Todas") {
-        this.tareasFiltradas = this.tareas.filter((tarea) =>
-          (tarea.categoria.toLowerCase().includes(categoria.toLowerCase()) && !tarea.completada)
+        this.tareasFiltradas = this.tareas.filter(
+          (tarea) =>
+            tarea.categoria.toLowerCase().includes(categoria.toLowerCase()) &&
+            !tarea.completada
         );
       } else if (completadas) {
         this.tareasFiltradas = this.tareas.filter((tarea) => tarea.completada);
         this.filtroActual.favoritas = false;
       } else if (favoritas) {
-        this.tareasFiltradas = this.tareas.filter((tarea) => tarea.favorita && !tarea.completada);
+        this.tareasFiltradas = this.tareas.filter(
+          (tarea) => tarea.favorita && !tarea.completada
+        );
         this.filtroActual.completadas = false;
       } else {
-        this.tareasFiltradas = this.tareas.filter((tarea) => !tarea.completada) ;
+        this.tareasFiltradas = this.tareas.filter((tarea) => !tarea.completada);
       }
       this.cambiarOrden(orden);
     },
@@ -162,9 +166,15 @@ export default {
       }
     },
 
-    async actualizarTarea(_id , titulo , categoria , descripcion) {
+    async actualizarTarea(_id, titulo, categoria, descripcion) {
       try {
-        await tareaServices.actualizarTarea(this.userId, _id , titulo ,categoria , descripcion);
+        await tareaServices.actualizarTarea(
+          this.userId,
+          _id,
+          titulo,
+          categoria,
+          descripcion
+        );
         // Después de actualizar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
       } catch (error) {
@@ -174,25 +184,43 @@ export default {
 
     async borrarTarea(_id: string) {
       try {
-        await tareaServices.borrarTarea(_id , this.userId);
+        await tareaServices.borrarTarea(_id, this.userId);
         // Después de borrar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
       } catch (error) {
         console.error(error.message);
       }
     },
-    completarTarea(_id: string) {
-      const tarea = this.tareas.find((tarea) => tarea._id === _id);      
+    async completarTarea(_id: string) {
+      const tarea = this.tareas.find((tarea) => tarea._id === _id);
       if (tarea) {
         tarea.completada = !tarea.completada;
+        try {
+          await tareaServices.completadaTarea(
+            this.userId,
+            _id,
+            tarea.completada
+          );
+          // Después de actualizar la tarea, vuelve a cargar las tareas
+          //await this.cargarTareas();
+        } catch (error) {
+          console.error(error.message);
+        }
       }
       this.filtrarYOrdenarTareas();
     },
-    marcarFavorita(_id: string) {
+    async marcarFavorita(_id: string) {
       const tarea = this.tareas.find((tarea) => tarea._id === _id);
 
       if (tarea) {
         tarea.favorita = !tarea.favorita;
+        try {
+          await tareaServices.favoritaTarea(this.userId, _id, tarea.favorita);
+          // Después de actualizar la tarea, vuelve a cargar las tareas
+          // await this.cargarTareas();
+        } catch (error) {
+          console.error(error.message);
+        }
       }
     },
   },

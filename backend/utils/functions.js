@@ -55,11 +55,11 @@ function setDataInModel(cacheKey, Model, userId, data) {
  * @param {{fields, othersFields }} updateFields
  * @returns
  */
-function updateDataInModel(cacheKey, Model, search, updateFields) {
+function updateDataInModel(cacheKey, Model, userId, search, updateFields) {
   return new Promise(async (resolve, reject) => {
     try {
-      await redis.del(cacheKey);
-      Logger.redisCacheRemove(cacheKey);
+      await redis.del(cacheKey + "-" + userId);
+      Logger.redisCacheRemove(cacheKey + "-" + userId);
 
       const updatedModel = await Model.findOneAndUpdate(search, updateFields, {
         new: true,
@@ -77,11 +77,11 @@ function updateDataInModel(cacheKey, Model, search, updateFields) {
   });
 }
 
-function deleteDocumentInModel(cacheKey, Model, search) {
+function deleteDocumentInModel(cacheKey, Model, userId, search) {
   return new Promise(async (resolve, reject) => {
     try {
-      await redis.del(cacheKey);
-      Logger.redisCacheRemove(cacheKey);
+      await redis.del(cacheKey + "-" + userId);
+      Logger.redisCacheRemove(cacheKey + "-" + userId);
 
       const deletedModel = await Model.deleteOne(search);
 

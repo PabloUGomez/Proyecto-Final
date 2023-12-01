@@ -14,6 +14,9 @@ router.post("/api/tasks", taskController.store);
 router.put("/api/tasks/:id", taskController.update);
 router.delete("/api/tasks/:id", taskController.delete);
 
+router.put("/api/tasks/:id/favorita", taskController.setFavorite);
+router.put("/api/tasks/:id/completada", taskController.setComplete);
+
 // Ruta para la página principal (index.html)
 router.get("*", (req, res) => {
   /*res.sendFile(
