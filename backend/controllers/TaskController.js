@@ -72,15 +72,13 @@ const taskController = {
     const taskId = request.params.id;
 
     //Body
-    const { title, categoria, descripcion, fecha, completada, favorita } =
-      request.body;
-
-    console.log(request.body);
+    const { userId, titulo, descripcion, categoria } = request.body;
 
     const filter = { _id: taskId, userId: userId };
 
-    const updateFields = { title, description, isComplete };
+    const updateFields = { titulo, descripcion, categoria };
 
+    console.log(filter, updateFields);
     updateDataInModel(keyRedisTask, Task, filter, updateFields)
       .then((updatedTask) => response.status(201).json(updatedTask))
       .catch((error) => response.status(500).send(error));
@@ -98,6 +96,9 @@ const taskController = {
     //Parameters
     const taskId = request.params.id;
 
+    //Body
+    console.log(request.headers);
+    console.log(taskId, userId);
     const filter = { _id: taskId, userId: userId };
 
     deleteDocumentInModel(keyRedisTask, Task, filter)

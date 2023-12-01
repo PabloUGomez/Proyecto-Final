@@ -28,7 +28,7 @@
                 v-model="categoria"
                 class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               >
-                <option value="Evento">Evento</option>
+                <option selected value="Evento">Evento</option>
                 <option value="Entretenimiento">Entretenimiento</option>
                 <option value="Deportes">Deportes</option>
             </select>
@@ -70,6 +70,17 @@
   
   <script lang="ts">
   export default {
+    props: {
+      tareaAEditar: {
+        type: Object as () => {
+          _id: string;
+          titulo: string;
+          categoria: string;
+          descripcion: string;
+        },
+        required: true,
+      },
+    },
     data() {
     return {
       titulo: '',
@@ -77,12 +88,18 @@
       descripcion: '',
     };
     },
+    mounted() {
+      this.titulo = this.tareaAEditar.titulo;
+      this.categoria = this.tareaAEditar.categoria;
+      this.descripcion = this.tareaAEditar.descripcion;
+    },
     methods: {
       cerrar() {
         this.$emit('cerrar');
       },
-      enviarDatos() {     
+      enviarDatos() {             
         this.$emit('enviarDatos', {
+        _id: this.tareaAEditar._id,
         titulo: this.titulo,
         categoria: this.categoria,
         descripcion: this.descripcion,

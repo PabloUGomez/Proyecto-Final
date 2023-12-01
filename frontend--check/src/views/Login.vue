@@ -1,7 +1,6 @@
 
 <template>
     <main class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white">
-  <!-- component -->
         <form class="flex w-[30rem] flex-col space-y-10" @submit.prevent="iniciarSesion">
             <div class="text-center text-4xl font-medium">Iniciar sesion</div>
             <div
@@ -45,7 +44,7 @@
                 </router-link>
             </p>
         </form>
-        <Alerta v-if="error" :texto='textoAlerta'/>
+        <AlertaError v-if="error" :texto='textoAlerta'/>
     </main>
 </template>
 
@@ -54,7 +53,7 @@
     import  Vue from 'vue';
     import {auth} from '../firebaseConfig';
     import {signInWithEmailAndPassword } from 'firebase/auth'
-    import Alerta from '../components/Alerta.vue'
+    import AlertaError from '../components/AlertaError.vue'
 
     export default Vue.extend({
         data() {
@@ -66,7 +65,7 @@
             };
         },
         components: {
-            Alerta
+            AlertaError,
         },
         methods: {
             iniciarSesion() {                 

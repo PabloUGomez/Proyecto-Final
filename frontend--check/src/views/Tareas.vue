@@ -17,8 +17,9 @@
       @completar-tarea="completarTarea($event)"
       @favorita-tarea="marcarFavorita($event)"
       @borrar-tarea="borrarTarea($event)"
+      @editar-tarea="actualizarTarea"
     ></ListaTareas>
-    <Alerta v-if="textoAlerta != ''" :texto="textoAlerta" />
+    <AlertaExito v-if="textoAlerta != ''" :texto="textoAlerta" />
   </main>
 </template>
 
@@ -29,7 +30,8 @@ import Header from "../components/Header.vue";
 import { auth } from "../firebaseConfig";
 import tareaServices from "../services/tareaServices";
 import { DateTime } from "luxon";
-import Alerta from "../components/Alerta.vue";
+import AlertaExito from "../components/AlertaExito.vue";
+import { filter } from "vue/types/umd";
 
 type Tarea = {
   _id: string;
@@ -46,7 +48,7 @@ export default {
   components: {
     ListaTareas,
     Header,
-    Alerta,
+    AlertaExito,
   },
   data() {
     return {
@@ -58,14 +60,19 @@ export default {
         orden: "Titulo de A - Z",
         completadas: false,
         favoritas: false,
-      },
+      } as {
+          categoria: string;
+          orden: string;
+          completadas: boolean;
+          favoritas: boolean;
+        },
       ordenes: [
         "Titulo de A - Z",
         "Titulo de Z - A",
         "Fecha Ascendente",
         "Fecha Descendente",
-      ],
-      textoAlerta: "",
+    ] as string[] ,
+      textoAlerta: "" as string,
     };
   },
   async mounted() {
@@ -76,16 +83,16 @@ export default {
       const { categoria, orden, completadas, favoritas } = this.filtroActual;
       if (categoria !== "Todas") {
         this.tareasFiltradas = this.tareas.filter((tarea) =>
-          tarea.categoria.toLowerCase().includes(categoria.toLowerCase())
+          (tarea.categoria.toLowerCase().includes(categoria.toLowerCase()) && !tarea.completada)
         );
       } else if (completadas) {
         this.tareasFiltradas = this.tareas.filter((tarea) => tarea.completada);
         this.filtroActual.favoritas = false;
       } else if (favoritas) {
-        this.tareasFiltradas = this.tareas.filter((tarea) => tarea.favorita);
+        this.tareasFiltradas = this.tareas.filter((tarea) => tarea.favorita && !tarea.completada);
         this.filtroActual.completadas = false;
       } else {
-        this.tareasFiltradas = this.tareas;
+        this.tareasFiltradas = this.tareas.filter((tarea) => !tarea.completada) ;
       }
       this.cambiarOrden(orden);
     },
@@ -129,9 +136,9 @@ export default {
     async cargarTareas() {
       try {
         //s
-        this.tareas = await tareaServices.obtenerTareas(auth.currentUser.uid);
+        this.tareas = await tareaServices.obtenerTareas(this.userId);
+        this.filtroActual.categoria = "Todas";
         this.filtrarYOrdenarTareas();
-        console.log(this.tareas);
       } catch (error) {
         console.error(error.message);
       }
@@ -155,9 +162,9 @@ export default {
       }
     },
 
-    async actualizarTarea(_id: number, tarea: any) {
+    async actualizarTarea(_id , titulo , categoria , descripcion) {
       try {
-        await tareaServices.actualizarTarea(_id, tarea);
+        await tareaServices.actualizarTarea(this.userId, _id , titulo ,categoria , descripcion);
         // Después de actualizar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
       } catch (error) {
@@ -165,23 +172,23 @@ export default {
       }
     },
 
-    async borrarTarea(_id: number) {
+    async borrarTarea(_id: string) {
       try {
-        await tareaServices.borrarTarea(_id);
+        await tareaServices.borrarTarea(_id , this.userId);
         // Después de borrar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
       } catch (error) {
         console.error(error.message);
       }
     },
-    completarTarea(_id: number) {
-      const tarea = this.tareas.find((tarea) => tarea._id === _id);
-
+    completarTarea(_id: string) {
+      const tarea = this.tareas.find((tarea) => tarea._id === _id);      
       if (tarea) {
         tarea.completada = !tarea.completada;
       }
+      this.filtrarYOrdenarTareas();
     },
-    marcarFavorita(_id: number) {
+    marcarFavorita(_id: string) {
       const tarea = this.tareas.find((tarea) => tarea._id === _id);
 
       if (tarea) {
