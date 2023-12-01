@@ -61,11 +61,21 @@ const taskController = {
   update: async (request, response) => {
     Logger.routerLog(request, "PUT", "taskController", "update");
 
+    const userId = request.headers["auth"];
+
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
     //Parameters
     const taskId = request.params.id;
 
     //Body
-    const { userId, title, description, isComplete } = request.body;
+    const { title, categoria, descripcion, fecha, completada, favorita } =
+      request.body;
+
+    console.log(request.body);
 
     const filter = { _id: taskId, userId: userId };
 
@@ -78,11 +88,15 @@ const taskController = {
   delete: async (request, response) => {
     Logger.routerLog(request, "DELETE", "taskController", "delete");
 
+    const userId = request.headers["auth"];
+
+    if (!userId) {
+      response.status(400).json({ error: "Encabezado Auth no existe" });
+      return;
+    }
+
     //Parameters
     const taskId = request.params.id;
-
-    //Body
-    const { userId } = request.body;
 
     const filter = { _id: taskId, userId: userId };
 
