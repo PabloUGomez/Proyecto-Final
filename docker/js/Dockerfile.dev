@@ -1,0 +1,25 @@
+# Utilizamos la imagen de Node.js 18 como base
+FROM node:18
+
+# Establecemos el directorio de trabajo en /usr/app
+WORKDIR /usr/app
+
+# Copiamos el archivo package.json y el archivo package-lock.json al directorio de trabajo
+#COPY ./src/package*.json ./
+COPY . .
+
+# Instalamos las dependencias del proyecto
+RUN npm install
+
+# Instalamos las dependencias del proyecto
+RUN npm install -g nodemon
+
+# Copiamos el resto de los archivos de la aplicación al directorio de trabajo
+# COPY . .
+
+# Exponemos el puerto 3000 para la aplicación (ajusta el puerto según tus necesidades)
+#EXPOSE 3000
+
+# Comando para iniciar la aplicación (puedes ajustarlo según tu proyecto)
+CMD ["nodemon", "."]
+# CMD ["nodemon", "-L"]
