@@ -65,25 +65,27 @@ const taskController = {
     const taskId = request.params.id;
 
     //Body
-    const { userId, title, description, isComplete } = request.body;
+    const { userId, titulo, descripcion, categoria } = request.body;
 
     const filter = { _id: taskId, userId: userId };
 
-    const updateFields = { title, description, isComplete };
+    const updateFields = { titulo, descripcion, categoria };
 
+    console.log(filter, updateFields);
     updateDataInModel(keyRedisTask, Task, filter, updateFields)
       .then((updatedTask) => response.status(201).json(updatedTask))
       .catch((error) => response.status(500).send(error));
   },
   delete: async (request, response) => {
     Logger.routerLog(request, "DELETE", "taskController", "delete");
-
+    
     //Parameters
     const taskId = request.params.id;
 
     //Body
-    const { userId } = request.body;
-
+    const userId = request.headers["user"];
+    console.log(request.headers);
+    console.log(taskId, userId);
     const filter = { _id: taskId, userId: userId };
 
     deleteDocumentInModel(keyRedisTask, Task, filter)

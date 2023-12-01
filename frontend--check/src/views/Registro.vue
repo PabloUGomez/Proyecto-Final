@@ -57,7 +57,7 @@
     import  Vue from 'vue';
     import {auth} from '../firebaseConfig';
     import {createUserWithEmailAndPassword} from 'firebase/auth'
-    import Alerta from '../components/Alerta.vue'
+    import AlertaError from '../components/AlertaError.vue'
 
     export default Vue.extend({
         data() {
@@ -70,7 +70,7 @@
             };
         },
         components: {
-            Alerta,
+            AlertaError,
         },
         methods: {
             registrar() { 

@@ -1,7 +1,7 @@
 <template>
   <div
     role="alert"
-    class="alert alert-error absolute w-4/5 md:w-1/4 sm:w-1/2 right-4 bottom-4"
+    class="alert alert-error fixed w-4/5 md:w-1/4 sm:w-1/2 right-4 bottom-4"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -20,9 +20,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
-  name: "AlertaCredenciales",
+  name: "AlertaError",
   props: {
     texto: {
       type: String,

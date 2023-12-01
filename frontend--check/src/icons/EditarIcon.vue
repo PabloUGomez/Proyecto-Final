@@ -1,7 +1,7 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    class="icon icon-tabler icon-tabler-calendar-event text-indigo-500"
+    class="icon icon-tabler icon-tabler-edit"
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -12,18 +12,16 @@
     stroke-linejoin="round"
   >
     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
     <path
-      d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"
+      d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"
     />
-    <path d="M16 3l0 4" />
-    <path d="M8 3l0 4" />
-    <path d="M4 11l16 0" />
-    <path d="M8 15h2v2h-2z" />
+    <path d="M16 5l3 3" />
   </svg>
 </template>
 
 <script lang="ts">
 export default {
-  name: "FechaIcon",
+  name: "CompletadaIcon",
 };
 </script>

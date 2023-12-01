@@ -16,11 +16,12 @@ router.delete("/api/tasks/:id", taskController.delete);
 
 // Ruta para la página principal (index.html)
 router.get("*", (req, res) => {
-  res.sendFile(
+  /*res.sendFile(
     path.join(
       __dirname,
       "G:GitHub ReposProyecto-Final-DAII\frontend--checkindex.html"
     )
-  );
+  );*/
+  res.sendFile(path.join(__dirname, "../../frontend--check/dist/index.html"));
 });
 module.exports = router;
