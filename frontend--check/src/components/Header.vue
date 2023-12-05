@@ -4,7 +4,7 @@
       <div class="flex justify-between">
         <div class="flex items-center">
           <span class="ml-2 font-semibold text-gray-100">
-            {"Logo"}Administrador de tareas
+            Administrador de tareas
           </span>
         </div>
         <div class="ml-2 flex">
