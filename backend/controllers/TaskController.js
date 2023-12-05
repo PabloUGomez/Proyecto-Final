@@ -22,11 +22,6 @@ const taskController = {
     Logger.routerLog(request, "GET", "taskController", "index");
     const userId = request.headers["auth"];
 
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
-
     getDataFromCache(keyRedisTask, Task, userId)
       .then((tasks) => response.status(200).json(tasks))
       .catch((error) => response.status(500).send(error));
