@@ -8,7 +8,9 @@
               <h3 class="text-base font-semibold text-gray-900">
                 {{ tarea.titulo }}
               </h3>
-              <span class="block text-xs font-normal text-gray-500">{{ tarea.categoria }}</span>
+              <span class="block text-xs font-normal text-gray-500">{{
+                tarea.categoria
+              }}</span>
             </div>
           </div>
           <div class="flex items-center" @click="marcarCompletada">
@@ -31,7 +33,9 @@
         <p class="my-6 text-sm font-normal text-gray-500">
           {{ tarea.descripcion }}
         </p>
-        <div class="mt-6 flex items-center justify-between text-sm font-semibold text-gray-900">
+        <div
+          class="mt-6 flex items-center justify-between text-sm font-semibold text-gray-900"
+        >
           <div class="flex items-center">
             <FechaIcon />
             <span class="mr-1">Fecha: {{ tarea.fecha }}</span>
@@ -50,19 +54,19 @@
               </div>
             </div>
             <div
-              class="p-1 rounded-lg hover:bg-red-100 cursor-pointer"
-              @click="borrarTarea"
-            >
-              <BorrarIcon />
-            </div>
-            <div
               class="p-1 rounded-lg hover:bg-gray-300 cursor-pointer"
               @click="editarTarea"
             >
               <EditarIcon />
             </div>
+            <div
+              class="p-1 rounded-lg hover:bg-red-100 cursor-pointer"
+              @click="borrarTarea"
+            >
+              <BorrarIcon />
+            </div>
           </div>
-        </div>        
+        </div>
       </article>
     </li>
   </transition>

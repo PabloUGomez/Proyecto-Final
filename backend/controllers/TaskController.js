@@ -12,20 +12,12 @@ const {
 } = require("../utils/functions.js");
 
 const Task = require("../models/Task.js");
-const Redis = require("ioredis");
-const redis = new Redis(env.REDIS_HOST);
-
 const keyRedisTask = "task";
 
 const taskController = {
   index: async (request, response) => {
     Logger.routerLog(request, "GET", "taskController", "index");
     const userId = request.headers["auth"];
-
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
 
     getDataFromCache(keyRedisTask, Task, userId)
       .then((tasks) => response.status(200).json(tasks))
@@ -36,11 +28,6 @@ const taskController = {
     Logger.routerLog(request, "POST", "taskController", "store");
 
     const userId = request.headers["auth"];
-
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
 
     const { titulo, categoria, descripcion, fecha } = request.body;
     const nuevoTask = new Task({
@@ -63,11 +50,6 @@ const taskController = {
 
     const userId = request.headers["auth"];
 
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
-
     //Parameters
     const taskId = request.params.id;
 
@@ -86,11 +68,6 @@ const taskController = {
 
     const userId = request.headers["auth"];
 
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
-
     //Parameters
     const taskId = request.params.id;
 
@@ -106,11 +83,6 @@ const taskController = {
     Logger.routerLog(request, "PUT", "taskController", "setFavorite");
 
     const userId = request.headers["auth"];
-
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
 
     //Parameters
     const taskId = request.params.id;
@@ -130,11 +102,6 @@ const taskController = {
     Logger.routerLog(request, "PUT", "taskController", "setComplete");
 
     const userId = request.headers["auth"];
-
-    if (!userId) {
-      response.status(400).json({ error: "Encabezado Auth no existe" });
-      return;
-    }
 
     //Parameters
     const taskId = request.params.id;

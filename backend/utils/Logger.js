@@ -42,6 +42,13 @@ class Logger {
     );
   }
 
+  static routerWarnLog(req, method, controllerName, functionName, message) {
+    this.dividerCyan();
+    this.log(
+      `${fontBrightYellow}[${method}] ${fontYellow}${req.originalUrl}${fontBrightYellow} => ${fontYellow}${controllerName}${fontBrightBlue}.${fontYellow}${functionName}(): ${fontWhite}${message}`
+    );
+  }
+
   static mongoNewModel(modelName, newModelId) {
     this.log(
       `${fontBrightGreen}MongoDB ${fontWhite}new document ${fontBrightGreen}created${fontWhite} from model: ${fontYellow}${modelName}${fontWhite}, with ID: ${fontYellow}${newModelId}`
