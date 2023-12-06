@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:3000/api/tasks";
-//const API_BASE_URL = "http://181.31.20.146:33333/api/tasks";
+//const API_BASE_URL = "http://127.0.0.1:3000/api/tasks";
+const API_BASE_URL = "http://181.31.20.146:33333/api/tasks";
 
 export default {
   async obtenerTareas(uid: string) {

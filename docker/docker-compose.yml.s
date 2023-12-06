@@ -34,6 +34,32 @@ services:
       front-tier:
         ipv4_address: 10.10.10.11
 
+  node_server_3:
+    container_name: node-3
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3003:5500"
+    volumes:
+      - ../backend:/usr/app/
+    networks:
+      front-tier:
+        ipv4_address: 10.10.10.12
+
+  node_server_4:
+    container_name: node-4
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3004:5500"
+    volumes:
+      - ../backend:/usr/app/
+    networks:
+      front-tier:
+        ipv4_address: 10.10.10.13
+
   redis:
     image: redis
     container_name: redis
