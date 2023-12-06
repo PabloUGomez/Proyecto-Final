@@ -66,7 +66,20 @@ npm run dev
 Para utilizar `Docker compose` se debe _modificar_ las siguientes cosas:
 
 1. En `/backend` _cambiar_ el nombre del archivo `.env` a `.env.<texto>`
-2. Cambiar el nombre del archivo `.env.docker.example` a `.env`
+2. Cambiar el nombre del archivo `.env.docker` a `.env`
 3. _Ir_ a la carpeta `/docker`
-4. En la carpeta `/nginx`, se _encuentra_ el archivo `.conf` el cual se debe _modificar_ si se quieren agregar más app node
+4. En la carpeta `/nginx`, se _encuentra_ el archivo `.conf` el cual se debe _modificar_ con la dirección ip del host
+
+```
+upstream loadbalancer {
+    server `HOST_IP`:3001;
+    server `HOST_IP`:3002;
+}
+server {
+    location / {
+        proxy_pass http://loadbalancer;
+    }
+}
+```
+
 5. _Ir_ a la carpeta `/docker` y correr `docker compose up`
