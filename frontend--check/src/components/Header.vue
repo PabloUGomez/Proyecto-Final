@@ -3,14 +3,15 @@
     <div class="py-3 px-6">
       <div class="flex justify-between">
         <div class="flex items-center">
-          <span class="ml-2 font-semibold text-gray-100">
-            Administrador de tareas
+          <span class="ml-2 w-1/4">
+            <img src="../assets/logo.png" alt="Logo task manager">
           </span>
         </div>
         <div class="ml-2 flex">
           <div
-            class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 hover:bg-indigo-600"
+            class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 mr-1 hover:bg-indigo-600"
             @click="filtrarCompletadas"
+            :class="{ 'bg-indigo-600': this.completadasClicked }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -29,6 +30,7 @@
           </div>
           <div
             class="flex cursor-pointer items-center gap-x-1 rounded-md py-2 px-4 hover:bg-indigo-600"
+            :class="{ 'bg-indigo-600': this.favoritasClicked }"
             @click="filtrarFavorita"
           >
             <svg
@@ -45,11 +47,18 @@
             </svg>
             <span class="text-sm font-medium text-gray-100">Favoritas</span>
           </div>
-          <div
-            class="ml-2 flex cursor-pointer items-center gap-x-1 rounded-md border py-2 px-4 hover:bg-indigo-600"
-            @click="cerrarSesion"
-          >
-            <span class="text-sm font-medium text-gray-100">Cerrar sesion</span>
+          <div class="dropdown dropdown-hover">
+            <div tabindex="0" role="button" class="btn m-1">{{ usuario }}</div>
+            <ul
+              tabindex="0"
+              class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
+            >
+              <li @click="cerrarSesion">
+                <span class="text-sm font-medium text-gray-100"
+                  >Cerrar sesion</span
+                >
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -156,6 +165,13 @@ import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";
 
 export default Vue.extend({
+  data() {
+    return {
+      completadasClicked: false as boolean,
+      favoritasClicked: false as boolean,
+      usuario: auth.currentUser?.email as string,
+    };
+  },
   props: {
     tareas: {
       type: Array as () => Array<{
@@ -180,22 +196,32 @@ export default Vue.extend({
     obtenerCategoriasUnicas() {
       if (this.tareas != null) {
         const categoriasSet = new Set(
-          this.tareas.map((tarea) => tarea.categoria)
+          this.tareas
+            .filter((tarea) => tarea.completada != true)
+            .map((tarea) => tarea.categoria)
         );
         return Array.from(categoriasSet);
       }
     },
     filtrarTarea(filtro: string) {
       this.$emit("filtrar-tareas", filtro);
+      this.completadasClicked = false;
+      this.favoritasClicked = false;
     },
     ordenarTareas(orden: string) {
       this.$emit("ordenar-tareas", orden);
+      this.completadasClicked = false;
+      this.favoritasClicked = false;
     },
     filtrarFavorita() {
       this.$emit("filtrar-favoritas");
+      this.favoritasClicked = !this.favoritasClicked;
+      if (this.completadasClicked) this.completadasClicked = false;
     },
     filtrarCompletadas() {
       this.$emit("filtrar-completadas");
+      this.completadasClicked = !this.completadasClicked;
+      if (this.favoritasClicked) this.favoritasClicked = false;
     },
     cerrarSesion() {
       signOut(auth)

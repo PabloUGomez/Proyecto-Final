@@ -59,7 +59,7 @@ export default {
       tareaAEditar: {
         _id: "",
         titulo: "",
-        categoria: "",
+        categoria: "Evento",
         descripcion: "",
       } as {
         _id: string;
@@ -91,6 +91,9 @@ export default {
           tarea.descripcion
         );
         this.tareaAEditar._id = "";
+        this.tareaAEditar.titulo = "";
+        this.tareaAEditar.categoria = "Evento";
+        this.tareaAEditar.descripcion = "";
       } else {
         this.crearTarea(
           tarea as {

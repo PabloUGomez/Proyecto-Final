@@ -18,7 +18,7 @@
             >
                 <input
                     type="password"
-                    placeholder="Password"
+                    placeholder="Clave"
                     v-model="password"
                     class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
                 />

@@ -7,16 +7,6 @@
                 class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
             >
                 <input
-                    type="text"
-                    placeholder="Nombre"
-                    v-model="nombre"
-                    class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-                />
-            </div>
-            <div
-                class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
-            >
-                <input
                     type="email"
                     placeholder="Email"
                     v-model="email"
@@ -28,11 +18,21 @@
             >
                 <input
                     type="password"
-                    placeholder="Password"
+                    placeholder="Clave"
                     v-model="password"
                     class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
                 />
             </div>
+            <div
+            class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+        >
+            <input
+                type="password"
+                placeholder="Repetir clave"
+                v-model="password2"
+                class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+            />
+        </div>
             <button
                 class="transform rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
                 type="submit"
@@ -49,7 +49,7 @@
                 </router-link>
             </p>
         </form>
-        <Alerta v-if="error" :texto='textoAlerta'/>
+        <AlertaError v-if="error" :texto='textoAlerta'/>
     </main>
 </template>
 
@@ -62,11 +62,11 @@
     export default Vue.extend({
         data() {
             return {
-                nombre: '',
                 email: '',
                 password: '',
+                password2: '',
                 error: false,
-                textoAlerta: 'Credenciales invalidas, intenta nuevamente.',
+                textoAlerta: '',
             };
         },
         components: {
@@ -74,13 +74,21 @@
         },
         methods: {
             registrar() { 
-            //validaciones extra           
+            if (this.password !== this.password2) {
+                this.error = true
+                this.textoAlerta = 'Las contraseñas no coinciden'
+                setTimeout(() => {
+                    this.error = false
+                }, 3000);
+                return
+            }           
             createUserWithEmailAndPassword(auth, this.email,this.password)
             .then (()=>{
                 this.$router.push('/Tareas')
             })
             .catch(()=>{
                 this.error = true
+                this.textoAlerta = 'Credenciales invalidas, intenta nuevamente.'
                 setTimeout(() => {
                     this.error = false
                 }, 3000);

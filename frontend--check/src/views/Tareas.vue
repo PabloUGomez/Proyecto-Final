@@ -2,11 +2,23 @@
   <main class="bg-gray-900">
     <Header
       :tareas="tareas"
-      @filtrar-tareas="filtroActual.categoria = $event"
-      @ordenar-tareas="filtroActual.orden = $event"
-      @filtrar-favoritas="filtroActual.favoritas = !filtroActual.favoritas"
+      @filtrar-tareas="
+        (filtroActual.categoria = $event),
+          (filtroActual.completadas = false),
+          (filtroActual.favoritas = false)
+      "
+      @ordenar-tareas="
+        (filtroActual.orden = $event),
+          (filtroActual.completadas = false),
+          (filtroActual.favoritas = false)
+      "
+      @filtrar-favoritas="
+        (filtroActual.favoritas = !filtroActual.favoritas),
+          (filtroActual.completadas = false)
+      "
       @filtrar-completadas="
-        filtroActual.completadas = !filtroActual.completadas
+        (filtroActual.completadas = !filtroActual.completadas),
+          (filtroActual.favoritas = false)
       "
       :ordenes="ordenes"
     ></Header>
@@ -81,13 +93,8 @@ export default {
   methods: {
     filtrarYOrdenarTareas() {
       const { categoria, orden, completadas, favoritas } = this.filtroActual;
-      if (categoria !== "Todas") {
-        this.tareasFiltradas = this.tareas.filter(
-          (tarea) =>
-            tarea.categoria.toLowerCase().includes(categoria.toLowerCase()) &&
-            !tarea.completada
-        );
-      } else if (completadas) {
+
+      if (completadas) {
         this.tareasFiltradas = this.tareas.filter((tarea) => tarea.completada);
         this.filtroActual.favoritas = false;
       } else if (favoritas) {
@@ -95,9 +102,18 @@ export default {
           (tarea) => tarea.favorita && !tarea.completada
         );
         this.filtroActual.completadas = false;
+      } else if (categoria !== "Todas") {
+        this.tareasFiltradas = this.tareas.filter(
+          (tarea) =>
+            tarea.categoria.toLowerCase().includes(categoria.toLowerCase()) &&
+            !tarea.completada
+        );
       } else {
         this.tareasFiltradas = this.tareas.filter((tarea) => !tarea.completada);
+        (this.filtroActual.completadas = false),
+          (this.filtroActual.favoritas = false);
       }
+
       this.cambiarOrden(orden);
     },
     cambiarOrden(orden: string) {
@@ -177,6 +193,9 @@ export default {
         );
         // Después de actualizar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
+        this.textoAlerta = "Tarea actualizada con exito";
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        this.textoAlerta = "";
       } catch (error) {
         console.error(error.message);
       }
@@ -187,6 +206,9 @@ export default {
         await tareaServices.borrarTarea(_id, this.userId);
         // Después de borrar la tarea, vuelve a cargar las tareas
         await this.cargarTareas();
+        this.textoAlerta = "Tarea eliminada con exito";
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        this.textoAlerta = "";
       } catch (error) {
         console.error(error.message);
       }
@@ -201,8 +223,9 @@ export default {
             _id,
             tarea.completada
           );
-          // Después de actualizar la tarea, vuelve a cargar las tareas
-          //await this.cargarTareas();
+          this.textoAlerta = "Felicitaciones, tarea completada con exito";
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          this.textoAlerta = "";
         } catch (error) {
           console.error(error.message);
         }
