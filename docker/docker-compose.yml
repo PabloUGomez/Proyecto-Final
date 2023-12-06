@@ -1,13 +1,5 @@
 version: "3"
 services:
-  vue_production_build:
-    container_name: vue_prod
-    image: httpd:latest
-    ports:
-      - 2999:80
-    volumes:
-      - ../frontend--check/dist:/usr/local/apache2/htdocs
-
   node_server_1:
     container_name: node-1
     build:
@@ -57,6 +49,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./mongo:/data/db
 
   nginx:
     build: ./nginx

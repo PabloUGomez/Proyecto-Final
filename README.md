@@ -47,6 +47,7 @@ _Abir_ una _consola_ o _teminal_ en _raiz_ del proyecto:
 
 ```shell
 cd backend
+npm install
 npm run start
 ```
 
@@ -54,6 +55,7 @@ _Abrir_ otra _consola_ o _terminal_ en _raiz_ del proyecto:
 
 ```shell
 cd frontend--check
+npm install
 npm run dev
 ```
 
